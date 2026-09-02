@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="CS 180 Project 0: Becoming Friends with My Camera"
+    />
+    <title>Becoming Friends with My Camera · CS 180</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <p class="course-label">CS 180 · Project 0 · Fall 2026</p>
+        <h1>Becoming Friends with My Camera</h1>
+        <p class="intro">
+          A short exploration of how camera position and focal length affect
+          perspective.
+        </p>
+      </header>
+
+      <section>
+        <h2>Part 1: Selfie — The Wrong Way vs. The Right Way</h2>
+        <div class="image-pair">
+          <figure>
+            <a href="./public/images/part1-close.jpg" target="_blank">
+              <img
+                src="./public/images/part1-close.jpg"
+                alt="Close-up portrait taken with a wide lens"
+              />
+            </a>
+            <figcaption>Close up</figcaption>
+          </figure>
+          <figure>
+            <a href="./public/images/part1-zoom.jpg" target="_blank">
+              <img
+                src="./public/images/part1-zoom.jpg"
+                alt="Portrait taken from farther away while zoomed in"
+              />
+            </a>
+            <figcaption>Farther away and zoomed in</figcaption>
+          </figure>
+        </div>
+        <p class="description">
+          In the close-up photo, the center of the face is much closer to the
+          camera than the sides, so features like the nose appear exaggerated.
+          Moving farther away reduces those relative depth differences. Zooming
+          in restores similar framing while keeping the more natural-looking
+          proportions.
+        </p>
+      </section>
+
+      <section>
+        <h2>Part 2: Architectural Perspective Compression</h2>
+        <div class="image-pair">
+          <figure>
+            <a href="./public/images/part2-zoom.jpg" target="_blank">
+              <img
+                src="./public/images/part2-zoom.jpg"
+                alt="Glass building photographed from farther away with zoom"
+                loading="lazy"
+              />
+            </a>
+            <figcaption>Farther away and zoomed in</figcaption>
+          </figure>
+          <figure>
+            <a href="./public/images/part2-wide.jpg" target="_blank">
+              <img
+                src="./public/images/part2-wide.jpg"
+                alt="The same glass building photographed from closer up"
+                loading="lazy"
+              />
+            </a>
+            <figcaption>Closer with a wider view</figcaption>
+          </figure>
+        </div>
+        <p class="description">
+          From farther away, the differences in depth across the building are
+          small compared with the total camera distance, so the scene looks
+          flatter and more compressed. From closer up, nearby parts of the scene
+          appear larger relative to distant parts, creating a stronger sense of
+          depth.
+        </p>
+      </section>
+
+      <section>
+        <h2>Part 3: The Dolly Zoom</h2>
+        <figure class="dolly-zoom">
+          <img
+            class="screen-only"
+            src="./public/images/dolly-zoom.gif"
+            alt="Animated dolly zoom around a small mechanical model"
+            loading="lazy"
+          />
+          <img
+            class="print-only"
+            src="./public/images/dolly-03.jpg"
+            alt="Middle frame of the dolly zoom sequence"
+          />
+        </figure>
+        <p class="description">
+          I moved the camera backward while zooming in, trying to keep the main
+          subject about the same size in every frame. The changing camera
+          position alters the perspective while the zoom compensates for the
+          subject's size, making the background appear to move around it.
+        </p>
+      </section>
+
+      <footer>CS 180 · Project 0 · Fall 2026</footer>
+    </main>
+  </body>
+</html>

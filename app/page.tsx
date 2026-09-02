@@ -4,10 +4,6 @@ export default function Home() {
       <header className="page-header">
         <p className="course-label">CS 180 · Project 0 · Fall 2026</p>
         <h1>Becoming Friends with My Camera</h1>
-        <p className="intro">
-          A short exploration of how camera position and focal length affect
-          perspective.
-        </p>
       </header>
 
       <section>

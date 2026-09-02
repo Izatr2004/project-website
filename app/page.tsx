@@ -49,9 +49,9 @@ export default function Home() {
 
         <div className="image-pair">
           <figure>
-            <a href="/images/part2-zoom.jpg" target="_blank" rel="noreferrer">
+            <a href="/images/part2-wide.jpg" target="_blank" rel="noreferrer">
               <img
-                src="/images/part2-zoom.jpg"
+                src="/images/part2-wide.jpg"
                 alt="Glass building photographed from farther away with zoom"
                 loading="lazy"
               />
@@ -60,9 +60,9 @@ export default function Home() {
           </figure>
 
           <figure>
-            <a href="/images/part2-wide.jpg" target="_blank" rel="noreferrer">
+            <a href="/images/part2-zoom.jpg" target="_blank" rel="noreferrer">
               <img
-                src="/images/part2-wide.jpg"
+                src="/images/part2-zoom.jpg"
                 alt="The same glass building photographed from closer up"
                 loading="lazy"
               />

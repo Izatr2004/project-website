@@ -36,11 +36,16 @@ export default function Home() {
         </div>
 
         <p className="description">
-          In the close-up photo, the center of the face is much closer to the
-          camera than the sides, so features like the nose appear exaggerated.
-          Moving farther away reduces those relative depth differences. Zooming
-          in restores similar framing while keeping the more natural-looking
-          proportions.
+          In the close-up photo, the center of the face is closer to the camera
+          than the sides. Because of this, I think the features in the center
+          appear larger than those near the sides, giving the face a more
+          triangular-looking shape.
+        </p>
+        <p className="description follow-up">
+          The second picture was taken from farther away, which seems to reduce
+          the relative depth difference that makes the center look larger. This
+          results in a flatter image. Zooming in mainly keeps me about the same
+          size in the frame, making the change in perspective easier to compare.
         </p>
       </section>
 

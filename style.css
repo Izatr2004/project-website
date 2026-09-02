@@ -103,6 +103,10 @@ figcaption {
   color: #44484d;
 }
 
+.description.follow-up {
+  margin-top: 14px;
+}
+
 .dolly-zoom {
   max-width: 520px;
 }

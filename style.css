@@ -59,6 +59,11 @@ h1 {
   font-size: 1.05rem;
 }
 
+.intro a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
 section {
   padding: 64px 0 16px;
 }

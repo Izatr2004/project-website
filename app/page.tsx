@@ -4,6 +4,11 @@ export default function Home() {
       <header className="page-header">
         <p className="course-label">CS 180 · Project 0 · Fall 2026</p>
         <h1>Becoming Friends with My Camera</h1>
+        <p className="intro">
+          <a href="https://izatr2004.github.io/project-website/">
+            https://izatr2004.github.io/project-website/
+          </a>
+        </p>
       </header>
 
       <section>

@@ -29,9 +29,9 @@ test("server-renders the finished project page", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Becoming Friends with My Camera · CS 180<\/title>/i);
-  assert.match(html, /The wrong way/);
-  assert.match(html, /Same building/);
-  assert.match(html, /Move back/);
+  assert.match(html, /Selfie — The Wrong Way vs\. The Right Way/);
+  assert.match(html, /Architectural Perspective Compression/);
+  assert.match(html, /The Dolly Zoom/);
   assert.match(html, /dolly-zoom\.gif/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

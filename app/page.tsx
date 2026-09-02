@@ -77,11 +77,12 @@ export default function Home() {
         </div>
 
         <p className="description">
-          From farther away, the differences in depth across the building are
-          small compared with the total camera distance, so the scene looks
-          flatter and more compressed. From closer up, nearby parts of the scene
-          appear larger relative to distant parts, creating a stronger sense of
-          depth.
+          In the photo taken from farther away, the differences in depth across
+          the building seem smaller compared with the total distance to the
+          camera. I think this makes the building look flatter and more
+          compressed. In the closer photo, parts of the building that are nearer
+          to the camera appear larger than parts that are farther away, creating
+          a stronger sense of depth.
         </p>
       </section>
 
@@ -104,9 +105,11 @@ export default function Home() {
 
         <p className="description">
           I moved the camera backward while zooming in, trying to keep the main
-          subject about the same size in every frame. The changing camera
-          position alters the perspective while the zoom compensates for the
-          subject&apos;s size, making the background appear to move around it.
+          subject about the same size in every frame. I think the changing
+          camera position changes the perspective, while the zoom makes up for
+          the change in the subject&apos;s size. This seems to make the
+          background shift around the subject even though the subject stays
+          roughly the same size.
         </p>
       </section>
 

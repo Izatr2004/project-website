@@ -18,12 +18,12 @@
       <h1>Colorizing the<br>Prokudin-Gorskii collection</h1>
       <p class="intro">Aligning red, green, and blue exposures to produce color images.</p>
       <p class="summary-line">14 provided images / 3 additional images / normalized cross-correlation</p>
-      <nav class="section-nav" aria-label="Report sections"><a href="#approach">Approach</a><a href="#single-scale">Single-scale</a><a href="#pyramid">Pyramid</a><a href="#additional">Additional images</a><a href="#offsets">Offsets</a><a href="#discussion">Discussion</a></nav>
+      <nav class="section-nav" aria-label="Report sections"><a href="#approach">Overview</a><a href="#single-scale">Single-scale</a><a href="#pyramid">Multi-scale</a><a href="#additional">Additional images</a><a href="#offsets">Offsets</a><a href="#discussion">Alignment issues</a></nav>
     </header>
 
     <section id="approach">
-      <p class="course-label">01 / Approach</p>
-      <h2>Channel alignment</h2>
+      <p class="course-label">01 / Overview</p>
+      <h2>Overview</h2>
       <div class="prose">
         <p>Prokudin-Gorskii photographed each scene through blue, green, and red filters. The scans contain three grayscale exposures stacked vertically, with blue at the top, green in the middle, and red at the bottom. Simply stacking them as RGB leaves colored outlines because the camera and scene could move between exposures.</p>
         <p>I divide each scan into three equal-height channels and keep blue fixed. I convert the data to floating point between 0 and 1, dividing 8-bit images by 255 and 16-bit images by 65535. Then I find the horizontal and vertical shifts for green and red and combine the aligned channels in RGB order. The single-scale search compares both channels directly to blue; the pyramid method aligns red through green, as explained below.</p>
@@ -84,8 +84,8 @@
     </section>
 
     <section id="pyramid">
-      <p class="course-label">03 / Multi-scale alignment</p>
-      <h2>Image pyramid</h2>
+      <p class="course-label">03 / Multi-scale pyramid alignment</p>
+      <h2>Multi-scale pyramid alignment</h2>
       <div class="prose">
         <p>The full-resolution TIFFs are roughly 3,000 × 4,000 pixels per channel, and their shifts can be much larger than 15 pixels. Enlarging the exhaustive search at full resolution would make it expensive to compare every candidate.</p>
         <ol>
@@ -300,8 +300,8 @@
     </section>
 
     <section id="offsets">
-      <p class="course-label">05 / Measurements</p>
-      <h2>Offsets and runtime</h2>
+      <p class="course-label">05 / Computed offsets</p>
+      <h2>Computed offsets</h2>
       <div class="prose"><p>These shifts align green and red to blue and are measured in pixels at the original resolution. Runtime includes reading, splitting, alignment, and stacking, but excludes displaying and saving the images. Times can vary between runs.</p></div>
       <div class="table-wrap"><table class="offset-table">
         <caption>Pyramid results · offsets (x, y) in pixels</caption>
@@ -328,8 +328,8 @@
     </section>
 
     <section id="discussion">
-      <p class="course-label">06 / Discussion</p>
-      <h2>Results and limitations</h2>
+      <p class="course-label">06 / Alignment issues</p>
+      <h2>Alignment issues</h2>
       <div class="prose">
         <p>My first result for Emir had large colored outlines around the face, turban, and clothing. NCC gave the wrong red-to-blue shift because the blue robe has very different brightness in those two channels. Aligning red to green and adding the green-to-blue shift fixed the main mismatch. I use this same reference order for all pyramid images. The comparison below shows the two results.</p>
       </div>

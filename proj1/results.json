@@ -1,0 +1,462 @@
+[
+  {
+    "filename": "cathedral.jpg",
+    "group": "provided",
+    "method": "single_scale",
+    "green_offset": [
+      2,
+      5
+    ],
+    "red_offset": [
+      3,
+      12
+    ],
+    "seconds": 0.089,
+    "width": 390,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/single_scale/cathedral.jpg",
+    "preview": "outputs/previews/single_scale-cathedral.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "cathedral.jpg",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      2,
+      5
+    ],
+    "red_offset": [
+      3,
+      12
+    ],
+    "seconds": 0.096,
+    "width": 390,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/pyramid/cathedral.jpg",
+    "preview": "outputs/previews/pyramid-cathedral.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "monastery.jpg",
+    "group": "provided",
+    "method": "single_scale",
+    "green_offset": [
+      2,
+      -3
+    ],
+    "red_offset": [
+      2,
+      3
+    ],
+    "seconds": 0.088,
+    "width": 391,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/single_scale/monastery.jpg",
+    "preview": "outputs/previews/single_scale-monastery.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "monastery.jpg",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      2,
+      -3
+    ],
+    "red_offset": [
+      2,
+      3
+    ],
+    "seconds": 0.085,
+    "width": 391,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/pyramid/monastery.jpg",
+    "preview": "outputs/previews/pyramid-monastery.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "tobolsk.jpg",
+    "group": "provided",
+    "method": "single_scale",
+    "green_offset": [
+      3,
+      3
+    ],
+    "red_offset": [
+      3,
+      6
+    ],
+    "seconds": 0.075,
+    "width": 396,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/single_scale/tobolsk.jpg",
+    "preview": "outputs/previews/single_scale-tobolsk.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "tobolsk.jpg",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      3,
+      3
+    ],
+    "red_offset": [
+      3,
+      6
+    ],
+    "seconds": 0.078,
+    "width": 396,
+    "height": 341,
+    "levels": 1,
+    "output": "outputs/pyramid/tobolsk.jpg",
+    "preview": "outputs/previews/pyramid-tobolsk.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "church.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      4,
+      25
+    ],
+    "red_offset": [
+      -4,
+      58
+    ],
+    "seconds": 0.972,
+    "width": 3634,
+    "height": 3202,
+    "levels": 5,
+    "output": "outputs/pyramid/church.jpg",
+    "preview": "outputs/previews/pyramid-church.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "emir.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      24,
+      49
+    ],
+    "red_offset": [
+      44,
+      64
+    ],
+    "seconds": 0.866,
+    "width": 3702,
+    "height": 3209,
+    "levels": 5,
+    "output": "outputs/pyramid/emir.jpg",
+    "preview": "outputs/previews/pyramid-emir.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "harvesters.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      17,
+      60
+    ],
+    "red_offset": [
+      14,
+      124
+    ],
+    "seconds": 0.773,
+    "width": 3683,
+    "height": 3218,
+    "levels": 5,
+    "output": "outputs/pyramid/harvesters.jpg",
+    "preview": "outputs/previews/pyramid-harvesters.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "icon.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      17,
+      41
+    ],
+    "red_offset": [
+      23,
+      89
+    ],
+    "seconds": 0.824,
+    "width": 3741,
+    "height": 3244,
+    "levels": 5,
+    "output": "outputs/pyramid/icon.jpg",
+    "preview": "outputs/previews/pyramid-icon.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "ilemselga.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      7,
+      40
+    ],
+    "red_offset": [
+      11,
+      130
+    ],
+    "seconds": 0.846,
+    "width": 3800,
+    "height": 3270,
+    "levels": 5,
+    "output": "outputs/pyramid/ilemselga.jpg",
+    "preview": "outputs/previews/pyramid-ilemselga.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "melons.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      10,
+      81
+    ],
+    "red_offset": [
+      14,
+      178
+    ],
+    "seconds": 0.902,
+    "width": 3770,
+    "height": 3241,
+    "levels": 5,
+    "output": "outputs/pyramid/melons.jpg",
+    "preview": "outputs/previews/pyramid-melons.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "religous_painting.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      3,
+      28
+    ],
+    "red_offset": [
+      7,
+      68
+    ],
+    "seconds": 0.766,
+    "width": 3742,
+    "height": 3193,
+    "levels": 5,
+    "output": "outputs/pyramid/religous_painting.jpg",
+    "preview": "outputs/previews/pyramid-religous_painting.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "self_portrait.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      29,
+      79
+    ],
+    "red_offset": [
+      37,
+      176
+    ],
+    "seconds": 0.896,
+    "width": 3810,
+    "height": 3251,
+    "levels": 5,
+    "output": "outputs/pyramid/self_portrait.jpg",
+    "preview": "outputs/previews/pyramid-self_portrait.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "siren.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      -6,
+      49
+    ],
+    "red_offset": [
+      -25,
+      96
+    ],
+    "seconds": 0.812,
+    "width": 3817,
+    "height": 3250,
+    "levels": 5,
+    "output": "outputs/pyramid/siren.jpg",
+    "preview": "outputs/previews/pyramid-siren.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "three_generations.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      14,
+      52
+    ],
+    "red_offset": [
+      11,
+      111
+    ],
+    "seconds": 0.829,
+    "width": 3714,
+    "height": 3209,
+    "levels": 5,
+    "output": "outputs/pyramid/three_generations.jpg",
+    "preview": "outputs/previews/pyramid-three_generations.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "wharf.tif",
+    "group": "provided",
+    "method": "pyramid",
+    "green_offset": [
+      -7,
+      15
+    ],
+    "red_offset": [
+      -16,
+      82
+    ],
+    "seconds": 0.807,
+    "width": 3761,
+    "height": 3244,
+    "levels": 5,
+    "output": "outputs/pyramid/wharf.jpg",
+    "preview": "outputs/previews/pyramid-wharf.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "kama_bridge.tif",
+    "group": "extra",
+    "method": "pyramid",
+    "green_offset": [
+      -9,
+      12
+    ],
+    "red_offset": [
+      5,
+      68
+    ],
+    "seconds": 0.724,
+    "width": 3742,
+    "height": 3225,
+    "levels": 5,
+    "output": "outputs/pyramid/kama_bridge.jpg",
+    "preview": "outputs/previews/pyramid-kama_bridge.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "lizhma_timber.tif",
+    "group": "extra",
+    "method": "pyramid",
+    "green_offset": [
+      0,
+      35
+    ],
+    "red_offset": [
+      -1,
+      123
+    ],
+    "seconds": 0.733,
+    "width": 3790,
+    "height": 3264,
+    "levels": 5,
+    "output": "outputs/pyramid/lizhma_timber.jpg",
+    "preview": "outputs/previews/pyramid-lizhma_timber.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  },
+  {
+    "filename": "trestle_bridge.tif",
+    "group": "extra",
+    "method": "pyramid",
+    "green_offset": [
+      25,
+      47
+    ],
+    "red_offset": [
+      30,
+      108
+    ],
+    "seconds": 0.71,
+    "width": 3732,
+    "height": 3205,
+    "levels": 5,
+    "output": "outputs/pyramid/trestle_bridge.jpg",
+    "preview": "outputs/previews/pyramid-trestle_bridge.jpg",
+    "search_window": 15,
+    "refine_window": 2,
+    "score_margin": 0.15,
+    "preview_crop": 0.1
+  }
+]

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CS 180 Project 1: colorizing the Prokudin-Gorskii collection with NCC alignment and image pyramids.">
+  <title>Colorizing the Prokudin-Gorskii collection · CS 180</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="project-one">
+  <header class="site-header">
+    <a class="wordmark" href="../index.html">Computer vision <span>(CS 180)</span></a>
+    <nav class="project-nav" aria-label="Projects"><a href="../index.html">Project 0</a><a href="./" aria-current="page">Project 1</a></nav>
+  </header>
+  <main>
+    <header class="page-header">
+      <p class="course-label">CS 180 · Project 1 · Fall 2026</p>
+      <h1>Colorizing the<br>Prokudin-Gorskii collection</h1>
+      <p class="intro">Reconstructing color from three separate glass-plate exposures using image alignment.</p>
+      <p class="summary-line">14 provided images / 3 additional images / normalized cross-correlation</p>
+      <nav class="section-nav" aria-label="Report sections"><a href="#approach">Approach</a><a href="#single-scale">Single-scale</a><a href="#pyramid">Pyramid</a><a href="#additional">Additional images</a><a href="#offsets">Offsets</a><a href="#discussion">Discussion</a></nav>
+    </header>
+
+    <section id="approach">
+      <p class="course-label">01 / Approach</p>
+      <h2>Three exposures, one color image.</h2>
+      <div class="prose">
+        <p>Prokudin-Gorskii photographed each scene through blue, green, and red filters. The scans contain three grayscale exposures stacked vertically, with blue at the top, green in the middle, and red at the bottom. Simply stacking them as RGB leaves colored outlines because the camera and scene could move between exposures.</p>
+        <p>I divide each scan into three equal-height channels and use blue as the reference. I convert the data to floating point between 0 and 1, dividing 8-bit images by 255 and 16-bit images by 65535. Then I find the horizontal and vertical shifts for green and red independently and combine the aligned channels in RGB order.</p>
+        <p>I use normalized cross-correlation (NCC) to compare the channels. For each candidate shift, I subtract the mean from each scoring region, divide by its L2 norm, and take their dot product. A larger score means a better match:</p>
+        <p class="formula">NCC(A, B) = Σ[(A − mean(A))(B − mean(B))]<br> / [√Σ(A − mean(A))² · √Σ(B − mean(B))²]</p>
+        <p>Mean subtraction removes an overall brightness offset, and normalization reduces sensitivity to overall contrast. It still compares intensity patterns: objects with very different brightness across color filters can cause the wrong alignment.</p>
+        <p>The dark and light scan borders are not scene content. I exclude a fixed interior margin when scoring and keep the scoring window inside the valid overlap for every candidate shift. This prevents wrapped pixels from contributing to NCC. The same parameters are used for every image.</p>
+      </div>
+    </section>
+
+    <section id="single-scale">
+      <p class="course-label">02 / Single-scale alignment</p>
+      <h2>Search a small window.</h2>
+      <div class="prose">
+        <p>For each of the three small JPEGs, I try every integer displacement from −15 to +15 pixels in both directions. The nested loops check 31 × 31 = 961 candidates per channel and keep the shift with the highest NCC. These images are small enough that this exhaustive search is fast.</p>
+        <p>Below, the cathedral comparison shows the colored outlines before alignment and the result after alignment. The three results that follow use the single-scale search.</p>
+      </div>
+      <div class="comparison image-pair">
+      <figure><img src="./images/before-cathedral.jpg" alt="Cathedral before alignment, with separated color edges" loading="lazy"><figcaption>Before · channels stacked without alignment</figcaption></figure>
+      <figure><a href="./images/full/single_scale-cathedral.jpg" title="Open full-resolution result">
+      <img src="./images/single_scale-cathedral.jpg" alt="Cathedral, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a><figcaption>After · single-scale NCC alignment</figcaption></figure>
+    </div>
+      <div class="gallery"><article class="result-card">
+          <figure><a href="./images/full/single_scale-cathedral.jpg" title="Open full-resolution result">
+      <img src="./images/single_scale-cathedral.jpg" alt="Cathedral, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Cathedral</h3>
+              <p class="offsets">G (+2, +5) &nbsp; R (+3, +12)</p>
+              <p class="meta">0.09 s · 390 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/single_scale-monastery.jpg" title="Open full-resolution result">
+      <img src="./images/single_scale-monastery.jpg" alt="Monastery, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Monastery</h3>
+              <p class="offsets">G (+2, -3) &nbsp; R (+2, +3)</p>
+              <p class="meta">0.09 s · 391 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/single_scale-tobolsk.jpg" title="Open full-resolution result">
+      <img src="./images/single_scale-tobolsk.jpg" alt="Tobolsk, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Tobolsk</h3>
+              <p class="offsets">G (+3, +3) &nbsp; R (+3, +6)</p>
+              <p class="meta">0.07 s · 396 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article></div>
+      <p class="note">All offsets on this page are (x, y) shifts applied to the moving channel to align it to blue. Positive x moves right; positive y moves down. G is green-to-blue and R is red-to-blue.</p>
+    </section>
+
+    <section id="pyramid">
+      <p class="course-label">03 / Multi-scale alignment</p>
+      <h2>Start small, then refine.</h2>
+      <div class="prose">
+        <p>The full-resolution TIFFs are roughly 3,000 × 4,000 pixels per channel, and their shifts can be much larger than 15 pixels. Enlarging the exhaustive search at full resolution would make it expensive to compare every candidate.</p>
+        <ol>
+          <li>Build a pyramid by repeatedly halving the channel dimensions with area-based resizing, which averages pixels when downsampling.</li>
+          <li>At the smallest level, search the full ±15-pixel window with the same intensity-based NCC used above.</li>
+          <li>Double the best displacement when moving to the next larger level, then search a small neighborhood around that estimate.</li>
+          <li>Repeat until the original resolution, and apply the final shifts to the original full-size channels using NumPy rolls.</li>
+        </ol>
+        <p class="parameters">I stop downsampling when the largest channel dimension is at most 400 pixels. I use a ±15-pixel search at that coarsest level, a ±2-pixel refinement at every larger level, and a 15% scoring margin on every side. The TIFFs have five levels; the JPEGs are already smaller than 400 pixels, so their pyramid has one level and gives the same result as the single-scale search.</p>
+        <p>All 14 supplied images are shown below, including the three JPEGs processed again with the pyramid method. Clicking a result opens the full-resolution output. The previews remove a fixed 10% from each edge for presentation; the linked full-size outputs preserve the complete frame. This is a fixed display crop, not automatic border detection.</p>
+      </div>
+      <div class="comparison image-pair">
+      <figure><img src="./images/before-harvesters.jpg" alt="Harvesters before alignment, with separated color edges" loading="lazy"><figcaption>Before · channels stacked without alignment</figcaption></figure>
+      <figure><a href="./images/full/pyramid-harvesters.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-harvesters.jpg" alt="Harvesters, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a><figcaption>After · pyramid NCC alignment</figcaption></figure>
+    </div>
+      <div class="gallery"><article class="result-card">
+          <figure><a href="./images/full/pyramid-cathedral.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-cathedral.jpg" alt="Cathedral, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Cathedral</h3>
+              <p class="offsets">G (+2, +5) &nbsp; R (+3, +12)</p>
+              <p class="meta">0.10 s · 390 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-monastery.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-monastery.jpg" alt="Monastery, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Monastery</h3>
+              <p class="offsets">G (+2, -3) &nbsp; R (+2, +3)</p>
+              <p class="meta">0.09 s · 391 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-tobolsk.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-tobolsk.jpg" alt="Tobolsk, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Tobolsk</h3>
+              <p class="offsets">G (+3, +3) &nbsp; R (+3, +6)</p>
+              <p class="meta">0.08 s · 396 × 341 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-church.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-church.jpg" alt="Church, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Church</h3>
+              <p class="offsets">G (+4, +25) &nbsp; R (-4, +58)</p>
+              <p class="meta">0.97 s · 3634 × 3202 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-emir.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-emir.jpg" alt="Emir, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Emir</h3>
+              <p class="offsets">G (+24, +49) &nbsp; R (+44, +64)</p>
+              <p class="meta">0.87 s · 3702 × 3209 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-harvesters.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-harvesters.jpg" alt="Harvesters, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Harvesters</h3>
+              <p class="offsets">G (+17, +60) &nbsp; R (+14, +124)</p>
+              <p class="meta">0.77 s · 3683 × 3218 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-icon.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-icon.jpg" alt="Icon, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Icon</h3>
+              <p class="offsets">G (+17, +41) &nbsp; R (+23, +89)</p>
+              <p class="meta">0.82 s · 3741 × 3244 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-ilemselga.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-ilemselga.jpg" alt="Ilemselga, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Ilemselga</h3>
+              <p class="offsets">G (+7, +40) &nbsp; R (+11, +130)</p>
+              <p class="meta">0.85 s · 3800 × 3270 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-melons.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-melons.jpg" alt="Melons, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Melons</h3>
+              <p class="offsets">G (+10, +81) &nbsp; R (+14, +178)</p>
+              <p class="meta">0.90 s · 3770 × 3241 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-religous_painting.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-religous_painting.jpg" alt="Religious painting, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Religious painting</h3>
+              <p class="offsets">G (+3, +28) &nbsp; R (+7, +68)</p>
+              <p class="meta">0.77 s · 3742 × 3193 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-self_portrait.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-self_portrait.jpg" alt="Self portrait, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Self portrait</h3>
+              <p class="offsets">G (+29, +79) &nbsp; R (+37, +176)</p>
+              <p class="meta">0.90 s · 3810 × 3251 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-siren.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-siren.jpg" alt="Siren, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Siren</h3>
+              <p class="offsets">G (-6, +49) &nbsp; R (-25, +96)</p>
+              <p class="meta">0.81 s · 3817 × 3250 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-three_generations.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-three_generations.jpg" alt="Three generations, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Three generations</h3>
+              <p class="offsets">G (+14, +52) &nbsp; R (+11, +111)</p>
+              <p class="meta">0.83 s · 3714 × 3209 px</p>
+
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-wharf.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-wharf.jpg" alt="Wharf, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Wharf</h3>
+              <p class="offsets">G (-7, +15) &nbsp; R (-16, +82)</p>
+              <p class="meta">0.81 s · 3761 × 3244 px</p>
+
+            </figcaption>
+          </figure>
+        </article></div>
+    </section>
+
+    <section id="additional">
+      <p class="course-label">04 / Additional images</p>
+      <h2>Three more from the collection.</h2>
+      <div class="prose"><p>I downloaded three additional original, three-exposure glass-plate scans from the Library of Congress. Each was processed at its original resolution with the same pyramid algorithm and parameters. The links below identify the original collection records.</p></div>
+      <div class="gallery"><article class="result-card">
+          <figure><a href="./images/full/pyramid-kama_bridge.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-kama_bridge.jpg" alt="Kama bridge, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Kama bridge</h3>
+              <p class="offsets">G (-9, +12) &nbsp; R (+5, +68)</p>
+              <p class="meta">0.72 s · 3742 × 3225 px</p>
+              <p class="source-link"><a href="https://www.loc.gov/pictures/item/2018681190/">Railway bridge over the Kama River · Library of Congress ↗</a></p>
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-lizhma_timber.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-lizhma_timber.jpg" alt="Lizhma timber, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Lizhma timber</h3>
+              <p class="offsets">G (+0, +35) &nbsp; R (-1, +123)</p>
+              <p class="meta">0.73 s · 3790 × 3264 px</p>
+              <p class="source-link"><a href="https://www.loc.gov/pictures/item/2018679214/">View from the timber mill in the village of Lizhma · Library of Congress ↗</a></p>
+            </figcaption>
+          </figure>
+        </article>
+<article class="result-card">
+          <figure><a href="./images/full/pyramid-trestle_bridge.jpg" title="Open full-resolution result">
+      <img src="./images/pyramid-trestle_bridge.jpg" alt="Trestle bridge, aligned color photograph" loading="lazy" width="1200" height="1050">
+    </a>
+            <figcaption><h3>Trestle bridge</h3>
+              <p class="offsets">G (+25, +47) &nbsp; R (+30, +108)</p>
+              <p class="meta">0.71 s · 3732 × 3205 px</p>
+              <p class="source-link"><a href="https://www.loc.gov/pictures/item/2018681242/">View of a trestle bridge · Library of Congress ↗</a></p>
+            </figcaption>
+          </figure>
+        </article></div>
+    </section>
+
+    <section id="offsets">
+      <p class="course-label">05 / Measurements</p>
+      <h2>Displacements and runtime.</h2>
+      <div class="prose"><p>These are the shifts actually applied to green and red relative to blue, in original-resolution pixels. Runtime includes reading, splitting, alignment, and stacking, but excludes JPEG encoding and saving. These measurements are from this machine and can vary between runs.</p></div>
+      <div class="table-wrap"><table class="offset-table">
+        <caption>Pyramid results · offsets (x, y) in pixels</caption>
+        <thead><tr><th scope="col">Image</th><th scope="col">Green → blue</th><th scope="col">Red → blue</th><th scope="col">Time (s)</th></tr></thead>
+        <tbody><tr><th scope="row">cathedral.jpg</th><td>(+2, +5)</td><td>(+3, +12)</td><td>0.10</td></tr>
+<tr><th scope="row">monastery.jpg</th><td>(+2, -3)</td><td>(+2, +3)</td><td>0.09</td></tr>
+<tr><th scope="row">tobolsk.jpg</th><td>(+3, +3)</td><td>(+3, +6)</td><td>0.08</td></tr>
+<tr><th scope="row">church.tif</th><td>(+4, +25)</td><td>(-4, +58)</td><td>0.97</td></tr>
+<tr><th scope="row">emir.tif</th><td>(+24, +49)</td><td>(+44, +64)</td><td>0.87</td></tr>
+<tr><th scope="row">harvesters.tif</th><td>(+17, +60)</td><td>(+14, +124)</td><td>0.77</td></tr>
+<tr><th scope="row">icon.tif</th><td>(+17, +41)</td><td>(+23, +89)</td><td>0.82</td></tr>
+<tr><th scope="row">ilemselga.tif</th><td>(+7, +40)</td><td>(+11, +130)</td><td>0.85</td></tr>
+<tr><th scope="row">melons.tif</th><td>(+10, +81)</td><td>(+14, +178)</td><td>0.90</td></tr>
+<tr><th scope="row">religous_painting.tif</th><td>(+3, +28)</td><td>(+7, +68)</td><td>0.77</td></tr>
+<tr><th scope="row">self_portrait.tif</th><td>(+29, +79)</td><td>(+37, +176)</td><td>0.90</td></tr>
+<tr><th scope="row">siren.tif</th><td>(-6, +49)</td><td>(-25, +96)</td><td>0.81</td></tr>
+<tr><th scope="row">three_generations.tif</th><td>(+14, +52)</td><td>(+11, +111)</td><td>0.83</td></tr>
+<tr><th scope="row">wharf.tif</th><td>(-7, +15)</td><td>(-16, +82)</td><td>0.81</td></tr>
+<tr><th scope="row">kama_bridge.tif</th><td>(-9, +12)</td><td>(+5, +68)</td><td>0.72</td></tr>
+<tr><th scope="row">lizhma_timber.tif</th><td>(+0, +35)</td><td>(-1, +123)</td><td>0.73</td></tr>
+<tr><th scope="row">trestle_bridge.tif</th><td>(+25, +47)</td><td>(+30, +108)</td><td>0.71</td></tr></tbody>
+      </table></div>
+      <p class="meta"><a href="./results.json">Measurements (JSON)</a> · <a href="./sources.json">Additional image sources (JSON)</a></p>
+    </section>
+
+    <section id="discussion">
+      <p class="course-label">06 / Discussion</p>
+      <h2>What worked, and what didn’t.</h2>
+      <div class="prose">
+        <p>The three single-scale JPEG results align well. The pyramid results also align the main structures in 13 of the 14 supplied images and all three additional examples. Emir is the clear failure: NCC does not correctly align the red channel to blue, leaving visible colored outlines around the face and clothing. The blue robe is bright in one exposure and dark in another, so matching raw intensity patterns can favor an incorrect displacement. Subtracting a mean and normalizing contrast cannot account for those local differences. I kept this result visible because it shows the limitation of the required intensity-based metric.</p>
+        <p>Translation also cannot correct movement within the scene, differences in camera rotation, or damage on a plate. Small colored fringes around moving leaves, water, or people can remain even when the stationary structures align. The fixed preview crop removes most scan borders, but the full-size images retain them so the complete output can be inspected.</p>
+        <p>I kept this implementation to the required CS180 methods: single-scale NCC and a pyramid using NCC on raw channel intensities. I did not add edge features, automatic cropping, contrast adjustments, or white balancing.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>CS 180 · Fall 2026 · <a href="../index.html">Project 0</a> / Project 1</p>
+      <p>Original photographs: Sergei Mikhailovich Prokudin-Gorskii / <a href="https://www.loc.gov/collections/prokudin-gorskii/">Library of Congress</a>.</p>
+      <p><a href="https://cal-cs180.github.io/fa26/hw/proj1/index.html">Assignment</a> · Visual style inspired by <a href="https://www.pi.website/">Physical Intelligence</a>.</p>
+      <p class="report-url"><a href="https://izatr2004.github.io/project-website/proj1/">https://izatr2004.github.io/project-website/proj1/</a></p>
+    </footer>
+  </main>
+  <div class="print-url">https://izatr2004.github.io/project-website/proj1/</div>
+</body>
+</html>

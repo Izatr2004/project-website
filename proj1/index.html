@@ -25,11 +25,11 @@
       <p class="course-label">01 / Overview</p>
       <h2>Overview</h2>
       <div class="prose">
-        <p>Prokudin-Gorskii photographed each scene through blue, green, and red filters. The scans contain three grayscale exposures stacked vertically, with blue at the top, green in the middle, and red at the bottom. Simply stacking them as RGB leaves colored outlines because the camera and scene could move between exposures.</p>
+        <p>Prokudin-Gorskii photographed each scene through blue, green, and red filters. The scans contain three grayscale exposures stacked vertically, with blue at the top, green in the middle, and red at the bottom. The channels do not line up exactly, so simply stacking them as RGB leaves colored outlines.</p>
         <p>I divide each scan into three equal-height channels and keep blue fixed. I convert the data to floating point between 0 and 1, dividing 8-bit images by 255 and 16-bit images by 65535. Then I find the horizontal and vertical shifts for green and red and combine the aligned channels in RGB order. The single-scale search compares both channels directly to blue; the pyramid method aligns red through green, as explained below.</p>
         <p>I use normalized cross-correlation (NCC) to compare the channels. For each candidate shift, I subtract the mean from each scoring region, divide by its L2 norm, and take their dot product. A larger score means a better match:</p>
         <p class="formula">NCC(A, B) = Σ[(A − mean(A))(B − mean(B))]<br> / [√Σ(A − mean(A))² · √Σ(B − mean(B))²]</p>
-        <p>Mean subtraction removes an overall brightness offset, and normalization reduces sensitivity to overall contrast. It still compares intensity patterns: objects with very different brightness across color filters can cause the wrong alignment.</p>
+        <p>Mean subtraction removes an overall brightness offset, and normalization accounts for overall contrast. NCC still compares the spatial pattern of intensities after this normalization. Those patterns can differ between color channels.</p>
         <p>The dark and light scan borders are not scene content. I exclude a fixed interior margin when scoring and keep the scoring window inside the valid overlap for every candidate shift. This prevents wrapped pixels from contributing to NCC. The same parameters are used for every image.</p>
       </div>
     </section>
@@ -94,7 +94,7 @@
           <li>Double the best displacement when moving to the next larger level, then search a small neighborhood around that estimate.</li>
           <li>Repeat until the original resolution, and apply the final shifts to the original full-size channels using NumPy rolls.</li>
         </ol>
-        <p>For every pyramid result, I align green to blue and red to green. Adding those two displacements gives the final red-to-blue shift: R→B = R→G + G→B. Red and green have more similar intensity patterns in Emir, so this avoids the wrong red-to-blue match while keeping the same raw-pixel NCC metric. Both final shifts are still applied relative to the unchanged blue channel.</p>
+        <p>For every pyramid result, I align green to blue and red to green. Adding those two displacements gives the final red-to-blue shift: R→B = R→G + G→B. For Emir, this reduced the large colored outlines compared with aligning red directly to blue. I discuss that result below. Both final shifts are applied relative to blue, and the metric is still NCC on raw channel intensities.</p>
         <p class="parameters">I stop downsampling when the largest channel dimension is at most 400 pixels. I use a ±15-pixel search at that coarsest level, a ±2-pixel refinement at every larger level, and a 15% scoring margin on every side. The TIFFs have five levels; the JPEGs are already smaller than 400 pixels, so their pyramid has one level. Pyramid JPEG offsets can differ slightly from single-scale results because red uses green as its reference.</p>
         <p>These are the pyramid results for all 14 supplied images, including the three JPEGs. The previews have a fixed 10% crop on each edge to remove most of the scan borders. Click an image to open the full-resolution, uncropped result.</p>
       </div>
@@ -155,7 +155,7 @@
             <figcaption><h3>Emir</h3>
               <p class="offsets">G (+24, +49) &nbsp; R (+41, +106)</p>
               <p class="meta">0.90 s · 3702 × 3209 px</p>
-              <p class="source-link">Red is aligned through green to avoid the direct red-to-blue NCC mismatch. See the comparison below.</p>
+              <p class="source-link">Aligning red through green reduced the large colored outlines. See the comparison below.</p>
             </figcaption>
           </figure>
         </article>
@@ -166,7 +166,7 @@
             <figcaption><h3>Harvesters</h3>
               <p class="offsets">G (+17, +60) &nbsp; R (+14, +125)</p>
               <p class="meta">0.84 s · 3683 × 3218 px</p>
-              <p class="source-link">Some people moved between exposures, leaving colored double outlines that a single image shift cannot remove.</p>
+              <p class="source-link">I think some people may have moved between exposures, which could explain the remaining colored outlines.</p>
             </figcaption>
           </figure>
         </article></div>
@@ -331,16 +331,16 @@
       <p class="course-label">06 / Alignment issues</p>
       <h2>Alignment issues</h2>
       <div class="prose">
-        <p>My first result for Emir had large colored outlines around the face, turban, and clothing. NCC gave the wrong red-to-blue shift because the blue robe has very different brightness in those two channels. Aligning red to green and adding the green-to-blue shift fixed the main mismatch. I use this same reference order for all pyramid images. The comparison below shows the two results.</p>
+        <p>My first result for Emir had large colored outlines around the face, turban, and clothing. The color channels have different brightness values. I think the differences around the robe may have caused NCC to choose a poor red-to-blue match. I tried aligning red to green instead, then added the green-to-blue shift. This reduced the large outlines in the comparison below. My guess is that red and green have more similar intensity patterns here, making them easier to match. I use this same reference order for all pyramid images.</p>
       </div>
       <div class="comparison image-pair">
         <figure><img src="./images/emir-direct-blue.jpg" alt="Emir with the red channel incorrectly aligned directly to blue" loading="lazy"><figcaption>Direct red-to-blue NCC · visible double outlines</figcaption></figure>
         <figure><a href="./images/full/pyramid-emir.jpg?v=green-reference" title="Open full-resolution result">
       <img src="./images/pyramid-emir.jpg?v=green-reference" alt="Emir, aligned color photograph" loading="lazy" width="1200" height="1050">
-    </a><figcaption>Red-to-green NCC, then combine shifts · corrected Emir</figcaption></figure>
+    </a><figcaption>Red-to-green NCC, then combine shifts · improved alignment</figcaption></figure>
       </div>
       <div class="prose description">
-        <p>Harvesters still has colored outlines around some people, especially the woman on the left. The three exposures were taken at different times, so people could move between them. Checking the global shift and trying a local alignment did not remove the broad blue/yellow outline. One shift per channel cannot align a person who moved separately from the rest of the scene. Smaller fringes may also come from lens distortion, camera rotation, or moving plants.</p>
+        <p>Harvesters still has colored outlines around some people, especially the woman on the left. I think movement between exposures could explain some of these outlines. Checking the global shift and trying a local alignment did not remove the broad blue/yellow outline. If a person moved separately from the background, one shift per channel would not align both. There may also be small alignment errors left over, so I cannot tell from this result how much is due to movement.</p>
         <p>Both methods use NCC on raw channel intensities. The full-size results retain the scan borders.</p>
       </div>
     </section>

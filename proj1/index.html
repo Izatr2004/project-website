@@ -16,14 +16,14 @@
     <header class="page-header">
       <p class="course-label">CS 180 · Project 1 · Fall 2026</p>
       <h1>Colorizing the<br>Prokudin-Gorskii collection</h1>
-      <p class="intro">Reconstructing color from three separate glass-plate exposures using image alignment.</p>
+      <p class="intro">Aligning red, green, and blue exposures to produce color images.</p>
       <p class="summary-line">14 provided images / 3 additional images / normalized cross-correlation</p>
       <nav class="section-nav" aria-label="Report sections"><a href="#approach">Approach</a><a href="#single-scale">Single-scale</a><a href="#pyramid">Pyramid</a><a href="#additional">Additional images</a><a href="#offsets">Offsets</a><a href="#discussion">Discussion</a></nav>
     </header>
 
     <section id="approach">
       <p class="course-label">01 / Approach</p>
-      <h2>Three exposures, one color image.</h2>
+      <h2>Channel alignment</h2>
       <div class="prose">
         <p>Prokudin-Gorskii photographed each scene through blue, green, and red filters. The scans contain three grayscale exposures stacked vertically, with blue at the top, green in the middle, and red at the bottom. Simply stacking them as RGB leaves colored outlines because the camera and scene could move between exposures.</p>
         <p>I divide each scan into three equal-height channels and keep blue fixed. I convert the data to floating point between 0 and 1, dividing 8-bit images by 255 and 16-bit images by 65535. Then I find the horizontal and vertical shifts for green and red and combine the aligned channels in RGB order. The single-scale search compares both channels directly to blue; the pyramid method aligns red through green, as explained below.</p>
@@ -36,7 +36,7 @@
 
     <section id="single-scale">
       <p class="course-label">02 / Single-scale alignment</p>
-      <h2>Search a small window.</h2>
+      <h2>Single-scale alignment</h2>
       <div class="prose">
         <p>For each of the three small JPEGs, I try every integer displacement from −15 to +15 pixels in both directions. The nested loops check 31 × 31 = 961 candidates per channel and keep the shift with the highest NCC. These images are small enough that this exhaustive search is fast.</p>
         <p>Below, the cathedral comparison shows the colored outlines before alignment and the result after alignment. The three results that follow use the single-scale search.</p>
@@ -85,7 +85,7 @@
 
     <section id="pyramid">
       <p class="course-label">03 / Multi-scale alignment</p>
-      <h2>Start small, then refine.</h2>
+      <h2>Image pyramid</h2>
       <div class="prose">
         <p>The full-resolution TIFFs are roughly 3,000 × 4,000 pixels per channel, and their shifts can be much larger than 15 pixels. Enlarging the exhaustive search at full resolution would make it expensive to compare every candidate.</p>
         <ol>
@@ -96,7 +96,7 @@
         </ol>
         <p>For every pyramid result, I align green to blue and red to green. Adding those two displacements gives the final red-to-blue shift: R→B = R→G + G→B. Red and green have more similar intensity patterns in Emir, so this avoids the wrong red-to-blue match while keeping the same raw-pixel NCC metric. Both final shifts are still applied relative to the unchanged blue channel.</p>
         <p class="parameters">I stop downsampling when the largest channel dimension is at most 400 pixels. I use a ±15-pixel search at that coarsest level, a ±2-pixel refinement at every larger level, and a 15% scoring margin on every side. The TIFFs have five levels; the JPEGs are already smaller than 400 pixels, so their pyramid has one level. Pyramid JPEG offsets can differ slightly from single-scale results because red uses green as its reference.</p>
-        <p>All 14 supplied images are shown below, including the three JPEGs processed again with the pyramid method. Clicking a result opens the full-resolution output. The previews remove a fixed 10% from each edge for presentation; the linked full-size outputs preserve the complete frame. This is a fixed display crop, not automatic border detection.</p>
+        <p>These are the pyramid results for all 14 supplied images, including the three JPEGs. The previews have a fixed 10% crop on each edge to remove most of the scan borders. Click an image to open the full-resolution, uncropped result.</p>
       </div>
       <div class="comparison image-pair">
       <figure><img src="./images/before-harvesters.jpg" alt="Harvesters before alignment, with separated color edges" loading="lazy"><figcaption>Before · channels stacked without alignment</figcaption></figure>
@@ -262,8 +262,8 @@
 
     <section id="additional">
       <p class="course-label">04 / Additional images</p>
-      <h2>Three more from the collection.</h2>
-      <div class="prose"><p>I downloaded three additional original, three-exposure glass-plate scans from the Library of Congress. Each was processed at its original resolution with the same pyramid algorithm and parameters. The links below identify the original collection records.</p></div>
+      <h2>Additional images</h2>
+      <div class="prose"><p>I downloaded three more glass-plate scans from the Library of Congress and processed them at full resolution with the same pyramid method and parameters. The source pages are linked below each result.</p></div>
       <div class="gallery"><div class="gallery-row"><article class="result-card">
           <figure><a href="./images/full/pyramid-kama_bridge.jpg?v=green-reference" title="Open full-resolution result">
       <img src="./images/pyramid-kama_bridge.jpg?v=green-reference" alt="Kama bridge, aligned color photograph" loading="lazy" width="1200" height="1050">
@@ -301,8 +301,8 @@
 
     <section id="offsets">
       <p class="course-label">05 / Measurements</p>
-      <h2>Displacements and runtime.</h2>
-      <div class="prose"><p>These are the shifts actually applied to green and red relative to blue, in original-resolution pixels. Runtime includes reading, splitting, alignment, and stacking, but excludes JPEG encoding and saving. These measurements are from this machine and can vary between runs.</p></div>
+      <h2>Offsets and runtime</h2>
+      <div class="prose"><p>These shifts align green and red to blue and are measured in pixels at the original resolution. Runtime includes reading, splitting, alignment, and stacking, but excludes displaying and saving the images. Times can vary between runs.</p></div>
       <div class="table-wrap"><table class="offset-table">
         <caption>Pyramid results · offsets (x, y) in pixels</caption>
         <thead><tr><th scope="col">Image</th><th scope="col">Green → blue</th><th scope="col">Red → blue</th><th scope="col">Time (s)</th></tr></thead>
@@ -329,9 +329,9 @@
 
     <section id="discussion">
       <p class="course-label">06 / Discussion</p>
-      <h2>What worked, and what didn’t.</h2>
+      <h2>Results and limitations</h2>
       <div class="prose">
-        <p>Aligning Emir’s red channel directly to blue produced the wrong shift and large colored double outlines. Its blue robe has very different brightness in the red and blue exposures, which confuses intensity NCC even after mean subtraction and normalization. Aligning red to green and adding green’s shift to blue fixes the main mismatch around the face, turban, and clothing. I use this same reference order for every pyramid image, without special offsets or a different metric for Emir. The comparison below shows the original direct-blue result and the corrected result.</p>
+        <p>My first result for Emir had large colored outlines around the face, turban, and clothing. NCC gave the wrong red-to-blue shift because the blue robe has very different brightness in those two channels. Aligning red to green and adding the green-to-blue shift fixed the main mismatch. I use this same reference order for all pyramid images. The comparison below shows the two results.</p>
       </div>
       <div class="comparison image-pair">
         <figure><img src="./images/emir-direct-blue.jpg" alt="Emir with the red channel incorrectly aligned directly to blue" loading="lazy"><figcaption>Direct red-to-blue NCC · visible double outlines</figcaption></figure>
@@ -340,9 +340,8 @@
     </a><figcaption>Red-to-green NCC, then combine shifts · corrected Emir</figcaption></figure>
       </div>
       <div class="prose description">
-        <p>Harvesters has a different limitation. The people were photographed at three different times, and some moved between exposures. The broad blue/yellow double outline around the woman on the left remains even after checking the global shift and trying a local alignment. A single translation can align the scene, but cannot align a person who moved independently. Smaller fringes can also remain from lens distortion, camera rotation, or moving plants. These residual artifacts are visible in the final result.</p>
-        <p>The fixed preview crop removes most scan borders, but the full-size images retain them so the complete output can be inspected.</p>
-        <p>I kept this implementation to the required CS180 methods: single-scale NCC and a pyramid using NCC on raw channel intensities. I did not add edge features, automatic cropping, contrast adjustments, or white balancing.</p>
+        <p>Harvesters still has colored outlines around some people, especially the woman on the left. The three exposures were taken at different times, so people could move between them. Checking the global shift and trying a local alignment did not remove the broad blue/yellow outline. One shift per channel cannot align a person who moved separately from the rest of the scene. Smaller fringes may also come from lens distortion, camera rotation, or moving plants.</p>
+        <p>Both methods use NCC on raw channel intensities. The full-size results retain the scan borders.</p>
       </div>
     </section>
 

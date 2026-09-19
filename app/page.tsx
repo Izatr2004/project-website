@@ -12,7 +12,7 @@ export default function Home() {
       </header>
 
       <section>
-        <h2>Part 1: Selfie — The Wrong Way vs. The Right Way</h2>
+        <h2>Part 1: Selfie, The Wrong Way vs. The Right Way</h2>
 
         <div className="image-pair">
           <figure>

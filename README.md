@@ -1,4 +1,4 @@
-# CS 180 Project 0 — Becoming Friends with My Camera
+# CS 180 Project 0: Becoming Friends with My Camera
 
 A responsive photo essay for CS 180 Project 0. It presents the portrait and
 architectural perspective comparisons, plus a five-frame dolly zoom.

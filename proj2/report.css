@@ -1,0 +1,61 @@
+
+.project-two h1 { font-size: clamp(40px, 5.5vw, 66px); }
+.project-two .report-page { padding-top: 58px; max-width: 1040px; }
+.project-two .report-page + .report-page { margin-top: 32px; border-top: 1px solid var(--line); }
+.project-two p { max-width: 940px; }
+.project-two figure { margin: 26px 0; break-inside: avoid; }
+.project-two figure img { display: block; width: 100%; height: auto; }
+.project-two figure.process img { max-width: 900px; margin: 0 auto; }
+.project-two figcaption { margin-top: 8px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+.project-two pre { padding: 20px; border: 1px solid var(--line); background: #eeede7; overflow-x: auto; font-size: 12px; line-height: 1.65; }
+.project-two code { font-family: inherit; }
+.project-two table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 12px; }
+.project-two th, .project-two td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.project-two th { font-weight: 500; }
+.project-two .formula { padding: 16px 20px; border-left: 2px solid var(--line); font-size: 14px; }
+.project-two .distance-view { display: flex; gap: 26px; align-items: center; margin: 24px 0; }
+.project-two .distance-view img { width: auto; height: auto; flex: none; max-width: 80px; }
+.project-two .distance-view p { max-width: 620px; font-size: 12px; margin: 0; color: var(--muted); }
+.project-two .sources { padding-left: 20px; font-size: 12px; }
+.project-two .sources li { margin-bottom: 5px; }
+@media (max-width: 640px) {
+  .project-two main, .project-two .site-header { width: calc(100% - 32px); }
+  .project-two .site-header { flex-direction: column; gap: 18px; }
+  .project-two main { padding-top: 38px; }
+  .project-two .report-page { padding-top: 38px; }
+  .project-two th, .project-two td { padding: 7px 4px; font-size: 10px; overflow-wrap: anywhere; }
+  .project-two pre { font-size: 10px; padding: 12px; }
+  .project-two .distance-view { gap: 14px; }
+}
+@media print {
+  @page { size: letter; margin: 0.55in 0.55in 0.6in; }
+  html { scroll-behavior: auto; }
+  body.project-two { background: white; font-size: 10px; line-height: 1.55; color: #151515; }
+  .project-two main { width: 100%; padding: 0; margin: 0; }
+  .project-two .site-header, .project-two .section-nav, .project-two footer { display: none; }
+  .project-two .page-header { padding: 0 0 12px; margin: 0 0 14px; }
+  .project-two .course-label { font-size: 8px; margin: 0 0 6px; }
+  .project-two h1 { font-size: 28px; margin: 0 0 7px; line-height: 1.1; }
+  .project-two h1 br { display: none; }
+  .project-two h2 { font-size: 23px; margin: 0 0 12px; }
+  .project-two h3 { font-size: 21px; margin: 0 0 12px; }
+  .project-two .intro { font-size: 8px; }
+  .project-two .report-page { padding: 0; margin: 0; border: 0; break-before: page; }
+  .project-two .report-page:first-of-type { break-before: auto; }
+  .project-two .report-page + .report-page { padding: 0; margin: 0; border: 0; }
+  .project-two p { margin: 0 0 10px; max-width: none; }
+  .project-two figure { margin: 12px 0; }
+  .project-two figure img { max-height: 5.5in; width: auto; max-width: 100%; margin: auto; }
+  .project-two figure.process img { max-height: 8.25in; width: auto; max-width: 100%; }
+  .project-two figure.stack img { max-height: 3.25in; width: auto; max-width: 100%; }
+  .project-two figcaption { font-size: 8px; line-height: 1.45; margin-top: 5px; }
+  .project-two pre { font-size: 9px; padding: 10px 12px; line-height: 1.4; margin: 10px 0; white-space: pre-wrap; overflow-wrap: anywhere; break-inside: avoid; }
+  .project-two table { font-size: 8px; margin: 12px 0; }
+  .project-two th, .project-two td { padding: 5px 7px; }
+  .project-two .formula { font-size: 11px; padding: 8px 12px; margin-bottom: 10px; }
+  .project-two .distance-view { margin: 12px 0; gap: 18px; break-inside: avoid; }
+  .project-two .distance-view p { font-size: 9px; }
+  .project-two .sources { font-size: 9px; line-height: 1.65; }
+  a { text-decoration: none; }
+  a[href]::after { content: none !important; }
+}

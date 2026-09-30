@@ -47,6 +47,7 @@
   .project-two figure img { max-height: 5.5in; width: auto; max-width: 100%; margin: auto; }
   .project-two figure.process img { max-height: 8.25in; width: auto; max-width: 100%; }
   .project-two figure.stack img { max-height: 3.25in; width: auto; max-width: 100%; }
+  .project-two #hybrid-filters figure img { max-height: 1.9in; }
   .project-two figcaption { font-size: 8px; line-height: 1.45; margin-top: 5px; }
   .project-two pre { font-size: 9px; padding: 10px 12px; line-height: 1.4; margin: 10px 0; white-space: pre-wrap; overflow-wrap: anywhere; break-inside: avoid; }
   .project-two table { font-size: 8px; margin: 12px 0; }

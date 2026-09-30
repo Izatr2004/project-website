@@ -16,8 +16,7 @@
 .project-two .distance-view { display: flex; gap: 26px; align-items: center; margin: 24px 0; }
 .project-two .distance-view img { width: auto; height: auto; flex: none; max-width: 80px; }
 .project-two .distance-view p { max-width: 620px; font-size: 12px; margin: 0; color: var(--muted); }
-.project-two .sources { padding-left: 20px; font-size: 12px; }
-.project-two .sources li { margin-bottom: 5px; }
+.project-two .image-credit { margin-top: 30px; font-size: 11px; color: var(--muted); }
 @media (max-width: 640px) {
   .project-two main, .project-two .site-header { width: calc(100% - 32px); }
   .project-two .site-header { flex-direction: column; gap: 18px; }
@@ -55,7 +54,7 @@
   .project-two .formula { font-size: 11px; padding: 8px 12px; margin-bottom: 10px; }
   .project-two .distance-view { margin: 12px 0; gap: 18px; break-inside: avoid; }
   .project-two .distance-view p { font-size: 9px; }
-  .project-two .sources { font-size: 9px; line-height: 1.65; }
+  .project-two .image-credit { font-size: 8px; }
   a { text-decoration: none; }
   a[href]::after { content: none !important; }
 }

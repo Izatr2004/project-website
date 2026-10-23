@@ -6,6 +6,7 @@ h1 { font-size: clamp(42px,6vw,76px); }
 .report-page p { max-width: 940px; }
 figure { margin: 28px 0; break-inside: avoid; }
 figure img { display:block; width:100%; height:auto; }
+#a34 figure img { max-width:512px; }
 .reference img { width:min(100%,240px); }
 figcaption { margin-top:8px; font-size:11px; color:var(--muted); }
 .draft { border-left:3px solid #ac762e; background:#efe5d3; padding:20px 24px; margin:30px 0; }

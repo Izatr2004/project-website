@@ -1,0 +1,64 @@
+body { font-size: 14px; }
+h1 { font-size: clamp(42px, 6vw, 76px); }
+.report-page { padding-top: 58px; max-width: 1040px; }
+.report-page + .report-page { margin-top: 28px; border-top: 1px solid var(--line); }
+.report-page p { max-width: 940px; }
+figure { margin: 25px 0; break-inside: avoid; }
+figure img { display: block; max-width: 100%; width: 100%; height: auto; }
+figure.original img { width: auto; max-width: 100%; max-height: 400px; margin: auto; }
+figure.portrait img { width: auto; max-width: 100%; max-height: 670px; margin: auto; }
+figcaption { margin-top: 9px; font-size: 11px; line-height: 1.6; color: var(--muted); }
+.print-url { display: none; }
+.source-note { border-left: 2px solid #8b7655; padding-left: 18px; margin-top: 22px; }
+.formula, pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #eae9e2; padding: 15px 18px; font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.matrix { width: fit-content; max-width: 100%; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px; }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 10px; text-align: left; }
+.small { font-size: 11px; color: var(--muted); }
+.report-page ul { padding-left: 20px; }
+.report-page li { margin-bottom: 10px; }
+.metrics { display: flex; flex-wrap: wrap; gap: 15px 30px; margin: 18px 0; font-size: 12px; }
+@media(max-width:640px) {
+  main, .site-header { width: calc(100% - 32px); }
+  main { padding-top: 36px; }
+  .site-header { flex-direction: column; gap: 18px; }
+  .report-page { padding-top: 38px; }
+  th, td { padding: 7px 5px; font-size: 10px; }
+  pre, .formula { font-size: 10px; padding: 12px; }
+}
+@media print {
+  @page {
+    size: letter; margin: .55in .55in .6in;
+    @bottom-left { content: "https://izatr2004.github.io/project-website/proj4/"; font: 8px monospace; color: #555; }
+    @bottom-right { content: counter(page); font: 9px monospace; color: #555; }
+  }
+  html { scroll-behavior: auto; }
+  body { background: white; color: #151515; font-size: 11px; line-height: 1.5; }
+  main { width: 100%; margin: 0; padding: 0; }
+  .site-header, .section-nav, footer { display: none; }
+  .page-header { padding: 0 0 14px; margin: 0 0 18px; }
+  .course-label { font-size: 9px; margin: 0 0 8px; }
+  h1 { font-size: 34px; margin-bottom: 12px; }
+  h1 br { display: none; }
+  h2 { font-size: 23px; margin-bottom: 13px; }
+  h3 { font-size: 17px; }
+  .intro { font-size: 11px; }
+  .print-url { display: block; font-size: 9px; margin: 0 0 8px; }
+  .report-page, .report-page + .report-page { padding: 0; margin: 0; border: 0; break-before: page; }
+  main > section:first-of-type { break-before: auto; }
+  .report-page p { margin-bottom: 11px; }
+  figure { margin: 12px 0; }
+  figure img { width: auto; max-width: 100%; max-height: 4.1in; margin: auto; }
+  figure.original img { max-height: 2.55in; }
+  figure.portrait img { max-height: 4.4in; }
+  figure.compact img { max-height: 2.1in; }
+  figure.detail img { max-height: 1.75in; }
+  figcaption { font-size: 9px; margin-top: 5px; }
+  .formula, pre { background: #f1f1ed; padding: 10px 12px; font-size: 10px; line-height: 1.6; }
+  table { font-size: 10px; margin: 12px 0; }
+  th, td { padding: 7px 8px; }
+  .source-note { padding-left: 12px; margin-top: 12px; }
+  .small { font-size: 9px; }
+  .metrics { font-size: 10px; gap: 10px 22px; margin: 13px 0; }
+  a { text-decoration: none; }
+}

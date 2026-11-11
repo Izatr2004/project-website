@@ -53,6 +53,7 @@ th, td { border-bottom: 1px solid var(--line); padding: 9px 10px; text-align: le
   figure.portrait img { max-height: 4.4in; }
   figure.compact img { max-height: 2.1in; }
   figure.detail img { max-height: 1.75in; }
+  figure.b-mosaic img { max-height: 3.2in; }
   figcaption { font-size: 9px; margin-top: 5px; }
   .formula, pre { background: #f1f1ed; padding: 10px 12px; font-size: 10px; line-height: 1.6; }
   table { font-size: 10px; margin: 12px 0; }
